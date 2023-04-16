@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AccountService } from '../_services/account.service';
 import { __core_private_testing_placeholder__ } from '@angular/core/testing';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: [ './register.component.css' ]
 })
 export class RegisterComponent implements OnInit {
   //@Input() usersFromHomComponent:any;
@@ -13,27 +14,32 @@ export class RegisterComponent implements OnInit {
 
   model: any = {};
 
-  constructor(private accountService: AccountService){}
+  constructor(private accountService: AccountService, private toast: ToastrService) { }
 
-  
+
   ngOnInit(): void {
   }
 
-  register(){
+  register() {
     this.accountService.register(this.model).subscribe({
       // next: response => {
       //   console.log(response);
       //   this.cancel();
       // },
-       next: () => {
+      next: () => {
         this.cancel();
       },
-      error: error => console.log(error)
+      error: error => {
+        this.toast.error(error.error.errors.Username
+        );
+        console.log(error)
+      }
+
     });
   }
 
-  cancel(){
-   this.cancelRegister.emit(false);
+  cancel() {
+    this.cancelRegister.emit(false);
   }
 
 }

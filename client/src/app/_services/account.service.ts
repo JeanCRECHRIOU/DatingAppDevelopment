@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
-import { User } from '../_models/User';
+import { User } from '../_models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -15,16 +15,23 @@ export class AccountService {
   constructor(private http: HttpClient) { }
 
   setCurrentUser(user: User){
+    console.log(user);
     this.currentUserSource.next(user);
   }
 
   login(model: User) {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
       map((response: User) => {
+        
         const user = response;
+        console.log("response");
+        console.log(response);
+
         if (user) {
           localStorage.setItem('user', JSON.stringify(user))
           this.setCurrentUser(user);
+          console.log("this.currentUser$");
+          console.log(this.currentUser$);
         }
       })
     );
